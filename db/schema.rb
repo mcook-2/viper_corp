@@ -97,6 +97,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_035924) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.text "features"
     t.integer "stock_quantity"
     t.bigint "category_id", null: false
     t.bigint "brand_id", null: false

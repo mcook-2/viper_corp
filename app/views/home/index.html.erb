@@ -68,3 +68,41 @@
     </div>
   </footer>
 </div>
+
+
+
+<h1>All Products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Features</th>
+      <th>Brand</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Stock Quantity</th>
+      <th>Images</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.description %></td>
+        <td><%= product.features %></td>
+        <td><%= product.brand.name %></td>
+        <td><%= product.category.name %></td>
+        <td><%= product.product_prices.last.price %></td>
+        <td><%= product.stock_quantity %></td>
+        <td>
+          <% product.images.each do |image| %>
+            <img src="<%= image.url %>" alt="<%= product.name %>" width="100" />
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

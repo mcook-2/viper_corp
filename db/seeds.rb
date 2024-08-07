@@ -30,7 +30,8 @@ CSV.foreach(Rails.root.join('db/y2k_all_products.csv'), headers: true) do |row|
   product = Product.create!(
     name: row['name'],
     description: row['description'],
-    stock_quantity: rand(10..350), # Assuming stock quantity is not provided in the CSV
+    features: row['features'],
+    stock_quantity: rand(10..350),
     category: category,
     brand: brand
   )
