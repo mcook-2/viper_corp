@@ -7,3 +7,48 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+
+require 'csv'
+
+# Clear existing records
+Product.destroy_all
+Category.destroy_all
+Brand.destroy_all
+Image.destroy_all
+
+# Load and process the CSV file
+CSV.foreach(Rails.root.join('db/y2k_all_products.csv'), headers: true) do |row|
+  # Find or create brand
+  brand = Brand.find_or_create_by(name: row['brand'])
+
+  # Find or create category
+  category = Category.find_or_create_by(name: row['category'])
+
+  # Create product
+  product = Product.create!(
+    name: row['name'],
+    description: row['description'],
+    stock_quantity: rand(10..350), # Assuming stock quantity is not provided in the CSV
+    category: category,
+    brand: brand
+  )
+
+  # Create product prices (assuming a default price)
+  ProductPrice.create!(
+    product: product,
+    start_date: Time.now,
+    end_date: nil,
+    price: row['price']
+  )
+
+  # Create images
+  images = row['images'].split('|')
+  images.each do |image_url|
+    Image.create!(
+      product: product,
+      url: image_url
+    )
+  end
+end
