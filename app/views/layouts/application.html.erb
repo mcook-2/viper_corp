@@ -6,8 +6,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
     <!-- Your custom CSS -->
@@ -17,29 +17,80 @@
       <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="<%= root_path %>">YourStore</a>
+        <a class="navbar-brand" href="<%= root_path %>">Viper Corp</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <%= link_to 'Home', root_path, class: 'nav-link' %>
             </li>
-            <% Category.all.each do |category| %>
-              <li class="nav-item">
-                <%= link_to category.name, products_path(category_id: category.id), class: 'nav-link' %>
-              </li>
-            <% end %>
+            <li class="nav-item">
+              <%= link_to 'Products', products_path, class: 'nav-link' %>
+            </li>
+            <!-- Categories Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <% @categories.each do |category| %>
+                  <%= link_to category.name, products_path(category_id: category.id), class: 'dropdown-item' %>
+                <% end %>
+              </div>
+            </li>
           </ul>
+          <!-- Search form in the nav -->
+          <%= form_with url: products_path, method: :get, local: true, class: 'd-flex align-items-center' do %>
+            <div class="input-group mb-6 ">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButtonSearch" data-bs-toggle="dropdown" aria-expanded="false">
+                <%= @categories.find { |c| c.id.to_s == params[:category_id] }&.name || 'Select Category' %>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSearch">
+                <li><a class="dropdown-item search-dropdown-item" href="#" data-category="">All</a></li>
+                <% @categories.each do |category| %>
+                  <li><a class="dropdown-item search-dropdown-item" href="#" data-category="<%= category.id %>"><%= category.name %></a></li>
+                <% end %>
+              </ul>
+              <input type="hidden" name="category_id" id="category_id" value="<%= params[:category_id] %>">
+              <input type="search" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search products" aria-label="Search" id="search-input">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </div>
+          <% end %>
         </div>
       </div>
     </nav>
     <%= yield %>
 
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var dropdownButton = document.getElementById('dropdownMenuButtonSearch');
+        var categoryInput = document.getElementById('category_id');
+        var searchInput = document.getElementById('search-input');
+
+        var selectedCategory = categoryInput.value;
+        var selectedCategoryName = document.querySelector(`.search-dropdown-item[data-category="${selectedCategory}"]`);
+
+        if (selectedCategoryName) {
+          dropdownButton.textContent = selectedCategoryName.textContent;
+        }
+
+        document.querySelectorAll('.search-dropdown-item').forEach(function(item) {
+          item.addEventListener('click', function(event) {
+            event.preventDefault();
+            var categoryId = this.getAttribute('data-category');
+            var categoryName = this.textContent;
+
+            categoryInput.value = categoryId;
+            searchInput.placeholder = 'Search in ' + (categoryName || 'All Categories');
+
+            dropdownButton.textContent = categoryName || 'Select Category';
+          });
+        });
+      });
+    </script>
     <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -1,10 +1,12 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.all
+    @categories = Category.all
     @products = filter_by_category(@products)
     @products = filter_by_sale(@products)
     @products = filter_by_new(@products)
     @products = sort_by_recently_updated(@products)
+    @products = search_by_keyword(@products)
     @products = paginate(@products)
   end
 
@@ -36,6 +38,12 @@ class ProductsController < ApplicationController
     return products unless params[:recently_updated]
 
     products.order(updated_at: :desc)
+  end
+
+  def search_by_keyword(products)
+    return products if params[:search].blank?
+
+    products.where("name ILIKE ?", "%#{params[:search]}%")
   end
 
   def paginate(products)

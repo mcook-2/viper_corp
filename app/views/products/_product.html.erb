@@ -1,9 +1,16 @@
-<div class="product">
-  <h2><%= link_to product.name, product_path(product) %></h2>
-  <p><%= product.description %></p>
-  <% if product.product_prices.any? %>
-    <p><%= number_to_currency(product.product_prices.first.price) %></p>
-  <% else %>
-    <p>No price available</p>
-  <% end %>
-</div>
+      <div class="col">
+        <div class="card" style="width: 18rem;">
+          <% if product.images.any? %>
+            <%= image_tag(product.images.first.url, alt: product.name, class: 'card-img-top') %>
+          <% else %>
+            <%= image_tag('placeholder.jpg', alt: 'No image available', class: 'card-img-top') %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= link_to product.name, product_path(product) %>
+            </h5>
+            <p class="card-text"><%= product.description %></p>
+            <p><%= number_to_currency(product.product_prices.first.price) %></p>
+          </div>
+        </div>
+      </div>
