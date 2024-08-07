@@ -1,0 +1,9 @@
+<div class="product">
+  <h2><%= link_to product.name, product_path(product) %></h2>
+  <p><%= product.description %></p>
+  <% if product.product_prices.any? %>
+    <p><%= number_to_currency(product.product_prices.first.price) %></p>
+  <% else %>
+    <p>No price available</p>
+  <% end %>
+</div>

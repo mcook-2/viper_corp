@@ -1,0 +1,5 @@
+# Ignore all files by default
+#*
+
+# Except files in the app directory
+#!app/**

@@ -2,11 +2,11 @@ class Product < ApplicationRecord
   # Associations
   belongs_to :category
   belongs_to :brand
-  has_many :order_items
   has_many :orders, through: :order_items
-  has_many :product_prices
-  has_many :images
-  has_many :reviews
+  has_many :order_items, dependent: :destroy
+  has_many :product_prices, dependent: :destroy
+  has_many :images, dependent: :destroy
+  has_many :reviews, dependent: :destroy
 
   # Validations
   validates :name, presence: true

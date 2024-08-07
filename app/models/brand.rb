@@ -1,7 +1,7 @@
 class Brand < ApplicationRecord
-# Associations
-has_many :products
+  # Associations
+  has_many :products, dependent: :nullify
 
-# Validations
-validates :name, presence: true
+  # Validations
+  validates :name, presence: true
 end

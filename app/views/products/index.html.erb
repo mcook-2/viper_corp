@@ -1,0 +1,16 @@
+<h1>Available Products</h1>
+
+<div class="filters">
+  <%= link_to 'All', products_path %>
+  <%= link_to 'On Sale', products_path(on_sale: true) %>
+  <%= link_to 'New Products', products_path(new: true) %>
+  <%= link_to 'Recently Updated', products_path(recently_updated: true) %>
+</div>
+
+<% @products.each do |product| %>
+  <%= render partial: 'product', locals: { product: product } %>
+<% end %>
+
+<div class="pagination">
+  <%= paginate @products %>
+</div>

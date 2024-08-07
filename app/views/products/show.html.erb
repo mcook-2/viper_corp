@@ -1,0 +1,73 @@
+<h1><%= @product.name %></h1>
+
+<div class="product-info">
+  <div class="product-images">
+    <!-- Display all images associated with the product -->
+    <% @product.images.each do |image| %>
+      <%= image_tag(image.url, alt: @product.name, class: 'product-image') %>
+    <% end %>
+  </div>
+
+  <div class="product-details">
+    <p><strong>Description:</strong></p>
+    <p><%= @product.description %></p>
+
+    <p><strong>Price:</strong> <%= number_to_currency(@product.product_prices.first.price) %></p>
+
+    <!-- additional details -->
+    <p><strong>Features:</strong></p>
+    <ul>
+      <% @product.features.split(',').each do |feature| %>
+        <li><%= feature.strip %></li>
+      <% end %>
+    </ul>
+
+    <!-- Add to Cart Button -->
+    <%= button_to 'Add to Cart', add_to_cart_product_path(@product), method: :post, class: 'add-to-cart-button' %>
+  </div>
+</div>
+
+<!-- Customer Reviews Section -->
+<div class="product-reviews">
+  <h2>Customer Reviews</h2>
+  <% @product.reviews.each do |review| %>
+    <div class="review">
+      <p><strong><%= review.user.name %></strong> - <%= review.rating %> stars</p>
+      <p><%= review.comment %></p>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.product-info {
+  display: flex;
+  gap: 20px;
+}
+
+.product-images {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-images img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.product-details {
+  max-width: 600px;
+}
+
+.add-to-cart-button {
+  background-color: #f0c14b;
+  border: 1px solid #a88734;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.product-reviews {
+  margin-top: 20px;
+}
+</style>
