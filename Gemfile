@@ -11,6 +11,8 @@ gem "sprockets-rails"
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.5', '>= 1.5.7'
 
+gem 'sassc-rails'
+
 gem 'activeadmin'
 
 # Plus integrations with:

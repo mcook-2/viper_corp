@@ -54,3 +54,4 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
     )
   end
 end
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
