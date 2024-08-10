@@ -1,7 +1,3 @@
-<div class="container">
-  <h1 class="text-center">Administrator</h1>
-  <%= render 'admin/nav_links' %>
-
   <table class="table table-dark table-striped">
     <thead>
       <tr>
@@ -26,4 +22,7 @@
       <% end %>
     </tbody>
   </table>
+    <div class="pagination mt-4">
+    <%= paginate @products %>
+  </div>
 </div>

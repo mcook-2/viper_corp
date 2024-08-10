@@ -23,10 +23,15 @@ gem 'solargraph', require: false, group: :development
 
 gem 'solargraph-rails', require: false, group: :development
 
+gem 'activeadmin'
+
 gem 'devise'
 
 # pagination
 gem 'kaminari'
+
+# bread Crumbs
+gem 'breadcrumbs_on_rails', '~> 4.1'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

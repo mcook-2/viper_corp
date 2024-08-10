@@ -1,0 +1,16 @@
+<div class="breadcrumbs" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <% @breadcrumbs.each_with_index do |breadcrumb, index| %>
+      <li class="breadcrumb-item<%= ' active' if breadcrumb[:path].nil? %>" aria-current="<%= 'page' if breadcrumb[:path].nil? %>">
+        <% if breadcrumb[:path] %>
+          <%= link_to breadcrumb[:name], breadcrumb[:path] %>
+        <% else %>
+          <%= breadcrumb[:name] %>
+        <% end %>
+      </li>
+      <% if index < @breadcrumbs.length - 1 %>
+        <li class="breadcrumb-separator"> &gt; </li>
+      <% end %>
+    <% end %>
+  </ol>
+</div>

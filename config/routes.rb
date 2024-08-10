@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     get 'admin', to: 'admin#index'
     get 'admin/products', to: 'admin#products', as: 'admin_products'
     get 'admin/show_products/:id', to: 'admin#show_product', as: 'admin_product'
+    get 'products/:id/edit', to: 'admin#edit_product', as: 'admin_edit_product'
+    patch 'products/:id', to: 'admin#update_product'
     get 'admin/orders'
     get 'admin/users'
     get 'admin/show_about_page'

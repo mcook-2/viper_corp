@@ -1,0 +1,13 @@
+  <h1>Editing Product</h1>
+
+  <!-- Render the product form partial -->
+  <%= render "product_form", product: @product %>
+
+  <br>
+  <div>
+    <!-- Link to show the product details -->
+    <%= link_to "Show this product", admin_product_path(@product) %> |
+    <!-- Link to back to the products index -->
+    <%= link_to "Back to products", admin_products_path %>
+  </div>
+</div>

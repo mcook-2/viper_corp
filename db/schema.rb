@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_09_183227) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_10_210027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_183227) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "colors", force: :cascade do |t|
+    t.string "name"
+    t.string "hex_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -84,6 +91,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_183227) do
     t.index ["customer_id"], name: "index_payment_methods_on_customer_id"
   end
 
+  create_table "product_colors", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "color_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["color_id"], name: "index_product_colors_on_color_id"
+    t.index ["product_id"], name: "index_product_colors_on_product_id"
+  end
+
   create_table "product_prices", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.datetime "start_date"
@@ -126,8 +142,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_183227) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.string "name"
-    t.integer "view"
-    t.integer "views", default: 0
     t.integer "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -140,6 +154,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_09_183227) do
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "customers"
   add_foreign_key "payment_methods", "customers"
+  add_foreign_key "product_colors", "colors"
+  add_foreign_key "product_colors", "products"
   add_foreign_key "product_prices", "products"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "categories"

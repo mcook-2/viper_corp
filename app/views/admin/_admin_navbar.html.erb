@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="<%= admin_path %>">Viper Corp Admin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <%= link_to 'Dashboard', admin_path, class: 'nav-link' %>
+        </li>
+        <%= render "admin/link", resource: Product %>
+        <%= render "admin/link", resource: User %>
+        <%= render "admin/link", resource: Order %>
+      </ul>
+      <!-- Search form in the nav -->
+      <%= form_with url: admin_products_path, method: :get, local: true, class: 'd-flex align-items-center' do %>
+        <div class="input-group mb-6">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButtonSearch" data-bs-toggle="dropdown" aria-expanded="false">
+            <%= @categories.find { |c| c.id.to_s == params[:category_id] }&.name || 'Select Category' %>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSearch">
+            <li><a class="dropdown-item search-dropdown-item" href="#" data-category="">All</a></li>
+            <% @categories.each do |category| %>
+              <li><a class="dropdown-item search-dropdown-item" href="#" data-category="<%= category.id %>"><%= category.name %></a></li>
+            <% end %>
+          </ul>
+          <input type="hidden" name="category_id" id="category_id" value="<%= params[:category_id] %>">
+          <input type="search" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search products" aria-label="Search" id="search-input">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </div>
+      <% end %>
+    </div>
+    <ul class="navbar-nav">
+      <%= render 'user/session_manager' %>
+    </ul>
+  </div>
+</nav>
