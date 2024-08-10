@@ -65,6 +65,7 @@ Rails.application.configure do
   # Outputs log info to console?
   config.log_level = :debug
 
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

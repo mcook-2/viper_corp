@@ -23,6 +23,8 @@ gem 'solargraph', require: false, group: :development
 
 gem 'solargraph-rails', require: false, group: :development
 
+gem 'devise'
+
 # pagination
 gem 'kaminari'
 

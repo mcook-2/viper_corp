@@ -54,3 +54,17 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
     )
   end
 end
+
+User.create(
+  email:                 "admin@example.com",
+  password:              "password",
+  password_confirmation: "password",
+  name:                  "Viper",
+  role:                  User.roles[:admin]
+)
+User.create(
+  email:                 "john@doe.com",
+  password:              "password",
+  password_confirmation: "password",
+  name:                  "John Doe"
+)
