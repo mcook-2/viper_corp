@@ -1,5 +1,5 @@
 class ProductPrice < ApplicationRecord
-  # Assocaitions
+  # Associations
   belongs_to :product
 
   # Validations

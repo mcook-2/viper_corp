@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,10 +60,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
   end
 
   create_table "colors", force: :cascade do |t|
-    t.string "name"
-    t.string "hex_code"
+    t.string "name", null: false
+    t.string "hex_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_colors_on_name", unique: true
   end
 
   create_table "customers", force: :cascade do |t|
@@ -123,6 +124,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["color_id"], name: "index_product_colors_on_color_id"
+    t.index ["product_id", "color_id"], name: "index_product_colors_on_product_id_and_color_id", unique: true
     t.index ["product_id"], name: "index_product_colors_on_product_id"
   end
 
@@ -134,6 +136,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_product_prices_on_product_id"
+  end
+
+  create_table "product_sales", force: :cascade do |t|
+    t.bigint "product_prices_id", null: false
+    t.decimal "original_price", null: false
+    t.decimal "sale_price"
+    t.decimal "discount_percentage", default: "0.0", null: false
+    t.decimal "before_tax_total", null: false
+    t.decimal "gst_total", null: false
+    t.decimal "hst_total", null: false
+    t.decimal "pst_total", null: false
+    t.decimal "tax_total", null: false
+    t.decimal "tax_included_total", null: false
+    t.bigint "tax_rate_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_prices_id"], name: "index_product_sales_on_product_prices_id"
+    t.index ["tax_rate_id"], name: "index_product_sales_on_tax_rate_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -161,16 +181,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
     t.index ["product_id"], name: "index_reviews_on_product_id"
   end
 
+  create_table "tax_rates", force: :cascade do |t|
+    t.string "province", null: false
+    t.decimal "gst_rate", default: "0.0", null: false
+    t.decimal "hst_rate", default: "0.0", null: false
+    t.decimal "pst_rate", default: "0.0", null: false
+    t.datetime "effective_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["province"], name: "index_tax_rates_on_province"
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.string "name"
-    t.integer "role"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.string "email"
+    t.string "password_digest"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "admins", "users"
@@ -183,6 +210,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_10_223157) do
   add_foreign_key "product_colors", "colors"
   add_foreign_key "product_colors", "products"
   add_foreign_key "product_prices", "products"
+  add_foreign_key "product_sales", "product_prices", column: "product_prices_id"
+  add_foreign_key "product_sales", "tax_rates"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "categories"
   add_foreign_key "reviews", "customers"
