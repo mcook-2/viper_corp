@@ -1,7 +1,4 @@
 class Category < ApplicationRecord
-  # Associations
-  has_many :products, dependent: :nullify
-
-  # Validations
-  validates :name, presence: true
+  has_and_belongs_to_many :products
+  has_and_belongs_to_many :clothing_types
 end

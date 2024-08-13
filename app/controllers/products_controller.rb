@@ -1,8 +1,9 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.all
-    @categories = Category.all
-    @products = filter_by_category(@products)
+    @clothing_types = ClothingType.all # Add this line to fetch clothing types
+
+    @products = filter_by_clothing_types(@products)
     @products = filter_by_sale(@products)
     @products = filter_by_new(@products)
     @products = sort_by_recently_updated(@products)
@@ -16,10 +17,10 @@ class ProductsController < ApplicationController
 
   private
 
-  def filter_by_category(products)
-    return products if params[:category_id].blank?
+  def filter_by_clothing_types(products)
+    return products if params[:clothing_type_id].blank?
 
-    products.where(category_id: params[:category_id])
+    products.where(clothing_type_id: params[:clothing_type_id])
   end
 
   def filter_by_sale(products)

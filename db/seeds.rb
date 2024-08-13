@@ -15,6 +15,7 @@ require "csv"
 
 # Clear existing records
 Product.destroy_all
+ClothingType.destroy_all
 Category.destroy_all
 Brand.destroy_all
 Image.destroy_all
@@ -25,8 +26,8 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
   # Find or create brand
   brand = Brand.find_or_create_by(name: row["brand"])
 
-  # Find or create category
-  category = Category.find_or_create_by(name: row["category"])
+  # Find or create clothing type
+  clothing_type = ClothingType.find_or_create_by(name: row["category"])
 
   # Create product
   product = Product.create!(
@@ -34,7 +35,7 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
     description:    row["description"],
     features:       row["features"],
     stock_quantity: rand(10..350),
-    category:,
+    clothing_type:,
     brand:
   )
 
@@ -76,6 +77,18 @@ tax_rates.each do |rate|
   TaxRate.create!(rate)
 end
 
+categories = [
+  "Graphic", "Vintage", "Y2K", "Floral", "Zip-Up", "Cropped", "Skeleton",
+  "Rhinestone", "Star", "Oversized", "Japanese", "Star", "Aesthetic", "Spider",
+  "Heart", "Band", "Logo", "Casual", "Baggy", "Ripped", "Printed", "Cargo",
+  "Flare", "High-Waisted", "Denim", "Goth", "Patchwork", "Jogger", "Sweatpants",
+  "Parachute", "Track", "Baggy Cargo", "Functional", "Designer", "Chunky",
+  "Platform", "Canvas", "High-Top", "Chunky Sole", "Sporty", "Fashion"
+]
+
+categories.each do |category_name|
+  Category.find_or_create_by!(name: category_name)
+end
 
 if Rails.env.development?
   AdminUser.create!(email: "admin@example.com", password: "password",

@@ -1,5 +1,11 @@
 ActiveAdmin.register Product do
 
+  permit_params :name, :description, :features, :stock_quantity, :clothing_type_id,
+  :brand_id, category_ids: [],
+  images_attributes: [:id, :url, :_destroy],
+  product_prices_attributes: [:id, :price, :start_date, :end_date, :_destroy],
+  product_colors_attributes: [:id, :color_id, :_destroy]
+
 
   show do
 
@@ -13,7 +19,16 @@ ActiveAdmin.register Product do
       row :description
       row :features
       row :stock_quantity
-      row :category
+      row :clothing_type
+      row :categories do
+        if product.categories.any?
+          ul do
+            product.categories.map { |category| li category.name }.join.html_safe
+          end
+        else
+          'No categories associated.'
+        end
+      end
       row :brand
       row :created_at
       row :updated_at
@@ -94,5 +109,70 @@ ActiveAdmin.register Product do
     # ActiveAdmin comments section
     active_admin_comments
   end
+
+  form do |f|
+    f.semantic_errors(*f.object.errors.attribute_names)
+
+    f.inputs 'Product Details' do
+      f.input :name
+      f.input :description
+      f.input :features
+      f.input :clothing_type, as: :select, collection: ClothingType.all.map { |c| [c.name, c.id] }, prompt: 'Select Clothing Type'
+      f.input :brand_id, as: :select, collection: Brand.all.collect { |b| [b.name, b.id] }, include_blank: 'Select brand'
+
+      # Display current categories applied to the product
+      panel 'Current Categories' do
+        if f.object.categories.any?
+          ul do
+            f.object.categories.each do |category|
+              li category.name
+            end
+          end
+        else
+          para 'No categories applied.'
+        end
+      end
+
+      # Input field labeled 'Add Categories'
+      f.input :category_ids, label: 'Add Categories', as: :select,
+              collection: Category.order(:name).collect { |c| [c.name, c.id] },
+              include_blank: 'Select categories',
+              input_html: { multiple: true }
+
+      # Links to create new brand and category
+      f.inputs do
+        para do
+          concat link_to 'Create New Brand', new_admin_brand_path, class: 'button'
+          concat link_to 'Create New Category', new_admin_category_path, class: 'button'
+        end
+      end
+    end
+
+    f.inputs 'Images' do
+      # Ensure there are images or initialize a new one
+      f.object.images.build if f.object.images.blank?
+
+      f.has_many :images, allow_destroy: true, new_record: true do |img|
+        img.input :url, as: :url, label: 'Image URL', placeholder: 'Enter image URL'
+      end
+    end
+
+    f.inputs 'Prices' do
+      f.has_many :product_prices, allow_destroy: true, new_record: true do |price|
+        price.input :price
+        price.input :start_date, as: :datepicker
+        price.input :end_date, as: :datepicker
+      end
+    end
+
+    f.inputs 'Colors' do
+      f.has_many :product_colors, allow_destroy: true, new_record: true do |product_color|
+        product_color.input :color, collection: Color.all.map { |c| [c.name, c.id] }, prompt: 'Select a color'
+      end
+    end
+
+    f.actions
+  end
+
 
 end

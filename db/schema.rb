@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_12_205232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "categories_products", id: false, force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["category_id", "product_id"], name: "index_categories_products_on_category_id_and_product_id", unique: true
+    t.index ["product_id"], name: "index_categories_products_on_product_id"
+  end
+
+  create_table "clothing_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "clothing_types_categories", id: false, force: :cascade do |t|
+    t.bigint "clothing_type_id", null: false
+    t.bigint "category_id", null: false
+    t.index ["clothing_type_id", "category_id"], name: "idx_on_clothing_type_id_category_id_dbab20b198", unique: true
+    t.index ["clothing_type_id"], name: "index_clothing_types_categories_on_clothing_type_id"
   end
 
   create_table "colors", force: :cascade do |t|
@@ -161,12 +181,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
     t.text "description"
     t.text "features"
     t.integer "stock_quantity"
-    t.bigint "category_id", null: false
+    t.bigint "clothing_type_id", null: false
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
-    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["clothing_type_id"], name: "index_products_on_clothing_type_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -201,6 +221,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
   end
 
   add_foreign_key "admins", "users"
+  add_foreign_key "categories_products", "categories"
+  add_foreign_key "categories_products", "products"
+  add_foreign_key "clothing_types_categories", "categories"
+  add_foreign_key "clothing_types_categories", "clothing_types"
   add_foreign_key "customers", "users"
   add_foreign_key "images", "products"
   add_foreign_key "order_items", "orders"
@@ -213,7 +237,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_12_000660) do
   add_foreign_key "product_sales", "product_prices", column: "product_prices_id"
   add_foreign_key "product_sales", "tax_rates"
   add_foreign_key "products", "brands"
-  add_foreign_key "products", "categories"
+  add_foreign_key "products", "clothing_types"
   add_foreign_key "reviews", "customers"
   add_foreign_key "reviews", "products"
 end

@@ -35,8 +35,8 @@
                 Categories
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <% @categories.each do |category| %>
-                  <%= link_to category.name, products_path(category_id: category.id), class: 'dropdown-item' %>
+                <% @clothing_types.each do |type| %>
+                  <%= link_to type.name, products_path(clothing_type_id: type.id), class: 'dropdown-item' %>
                 <% end %>
               </div>
             </li>
@@ -45,15 +45,15 @@
           <%= form_with url: products_path, method: :get, local: true, class: 'd-flex align-items-center' do %>
             <div class="input-group mb-6 ">
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButtonSearch" data-bs-toggle="dropdown" aria-expanded="false">
-                <%= @categories.find { |c| c.id.to_s == params[:category_id] }&.name || 'Select Category' %>
+                <%= @clothing_types.find { |c| c.id.to_s == params[:clothing_type_id] }&.name || 'Select Category' %>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSearch">
                 <li><a class="dropdown-item search-dropdown-item" href="#" data-category="">All</a></li>
-                <% @categories.each do |category| %>
-                  <li><a class="dropdown-item search-dropdown-item" href="#" data-category="<%= category.id %>"><%= category.name %></a></li>
+                <% @clothing_types.each do |type| %>
+                  <li><a class="dropdown-item search-dropdown-item" href="#" data-category="<%= type.id %>"><%= type.name %></a></li>
                 <% end %>
               </ul>
-              <input type="hidden" name="category_id" id="category_id" value="<%= params[:category_id] %>">
+              <input type="hidden" name="clothing_type_id" id="clothing_type_id" value="<%= params[:clothing_type_id] %>">
               <input type="search" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search products" aria-label="Search" id="search-input">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
@@ -66,26 +66,26 @@
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var dropdownButton = document.getElementById('dropdownMenuButtonSearch');
-        var categoryInput = document.getElementById('category_id');
+        var clothingTypesInput = document.getElementById('clothing_type_id');
         var searchInput = document.getElementById('search-input');
 
-        var selectedCategory = categoryInput.value;
-        var selectedCategoryName = document.querySelector(`.search-dropdown-item[data-category="${selectedCategory}"]`);
+        var selectedClothingType = clothingTypesInput.value;
+        var selectedClothingTypeName = document.querySelector(`.search-dropdown-item[data-category="${selectedClothingType}"]`);
 
-        if (selectedCategoryName) {
-          dropdownButton.textContent = selectedCategoryName.textContent;
+        if (selectedClothingTypeName) {
+          dropdownButton.textContent = selectedClothingTypeName.textContent;
         }
 
         document.querySelectorAll('.search-dropdown-item').forEach(function(item) {
           item.addEventListener('click', function(event) {
             event.preventDefault();
-            var categoryId = this.getAttribute('data-category');
-            var categoryName = this.textContent;
+            var clothingTypeId = this.getAttribute('data-category');
+            var clothingTypeName = this.textContent;
 
-            categoryInput.value = categoryId;
-            searchInput.placeholder = 'Search in ' + (categoryName || 'All Categories');
+            clothingTypesInput.value = clothingTypeId;
+            searchInput.placeholder = 'Search in ' + (clothingTypeName || 'All Categories');
 
-            dropdownButton.textContent = categoryName || 'Select Category';
+            dropdownButton.textContent = clothingTypeName || 'Select Category';
           });
         });
       });
