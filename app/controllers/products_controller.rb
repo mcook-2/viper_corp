@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+  before_action :initialize_session
+  before_action :load_cart
+
   def index
     @products = Product.all
     @clothing_types = ClothingType.all # Add this line to fetch clothing types
@@ -14,8 +17,6 @@ class ProductsController < ApplicationController
   def show
     @product = Product.find(params[:id])
   end
-
-  private
 
   def filter_by_clothing_type_name(products)
     return products if params[:clothing_type_name].blank?
