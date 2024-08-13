@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
     @products = Product.all
     @clothing_types = ClothingType.all # Add this line to fetch clothing types
 
-    @products = filter_by_clothing_types(@products)
+    @products = filter_by_clothing_type_name(@products)
     @products = filter_by_sale(@products)
     @products = filter_by_new(@products)
     @products = sort_by_recently_updated(@products)
@@ -17,10 +17,11 @@ class ProductsController < ApplicationController
 
   private
 
-  def filter_by_clothing_types(products)
-    return products if params[:clothing_type_id].blank?
+  def filter_by_clothing_type_name(products)
+    return products if params[:clothing_type_name].blank?
 
-    products.where(clothing_type_id: params[:clothing_type_id])
+    clothing_type = ClothingType.find_by("LOWER(name) = ?", params[:clothing_type_name].downcase)
+    clothing_type ? products.where(clothing_type_id: clothing_type.id) : products.none
   end
 
   def filter_by_sale(products)
