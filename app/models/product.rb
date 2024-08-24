@@ -11,6 +11,9 @@ class Product < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :product_colors, dependent: :destroy
   has_many :colors, through: :product_colors
+  has_many :cart_items, dependent: :nullify
+  has_many :carts, through: :cart_items
+
 
   # Nested attributes
   accepts_nested_attributes_for :images, allow_destroy: true

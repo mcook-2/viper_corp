@@ -14,6 +14,19 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
+
+    <!-- Display session data for debugging -->
+  <div style=" top: 0; right: 0; background: rgba(0, 0, 0, 0.8); color: white; padding: 10px; z-index: 10000;">
+    <strong>Session Data:</strong>
+    <%= debug(session) %>
+  </div>
+
+  <% flash.each do |type, message| %>
+  <div class="flash <%= type %>">
+    <%= message %>
+  </div>
+<% end %>
+
       <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
@@ -44,11 +57,47 @@
           <%= render 'layouts/search_form' %>
           <ul class="navbar-nav">
             <%= render 'user/session_manager' %>
+            <li class="nav-item">
+              <%= image_tag 'cart.svg', alt: 'Cart', class: 'cart-icon', id: "cart-icon", style: 'width: 40px; height: 40px;' %>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
+
+  <!-- Cart Div -->
+  <div id="cart-div" class="cart-div">
+    <!-- Cart content goes here -->
+    <%= render partial: 'cart/cart' if @render_cart %>
+  </div>
+
     <%= yield %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cartIcon = document.getElementById('cart-icon');
+    const cartDiv = document.getElementById('cart-div');
+    const closeButton = document.getElementById('close-button');
+
+    if (cartIcon && cartDiv) {
+      cartIcon.addEventListener('click', function() {
+        // Toggle the 'show' class to slide the cart div in and out
+        cartDiv.classList.toggle('show');
+      });
+    }
+
+    if (closeButton && cartDiv) {
+      closeButton.addEventListener('click', function() {
+        // Remove the 'show' class to hide the cart div
+        cartDiv.classList.remove('show');
+      });
+    }
+  });
+</script>
+
+
+
+
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {

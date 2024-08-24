@@ -1,0 +1,100 @@
+<%= render 'cart' %>
+
+<div class="mini-cart">
+  <header class="drawer-header">
+    <p class="drawer-title">
+      <svg focusable="false" width="20" height="18" class="icon" viewBox="0 0 20 18">
+        <path d="M3 1h14l1 16H2L3 1z" fill="none" stroke="currentColor" stroke-width="2"></path>
+        <path d="M7 4v0a3 3 0 003 3v0a3 3 0 003-3v0" fill="none" stroke="currentColor" stroke-width="2"></path>
+      </svg>
+      Your Shopping Cart
+    </p>
+    <button type="button" class="close-button" data-action="close" title="Close">
+      <svg focusable="false" width="14" height="14" class="icon" viewBox="0 0 14 14">
+        <path d="M13 13L1 1M13 1L1 13" stroke="currentColor" stroke-width="2" fill="none"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div class="drawer-content">
+    <% if @cart_items.present? %>
+      <% @cart_items.each do |item| %>
+        <% product = @products[item.product_id] %>
+        <% if product %>
+          <div class="line-item">
+            <div class="line-item-content">
+              <a href="<%= product_path(product) %>" class="line-item-image-wrapper">
+                <img class="line-item-image" src="<%= product.image_url %>" alt="<%= product.name %>">
+              </a>
+              <div class="line-item-info">
+                <div class="product-meta">
+                  <a href="<%= product_path(product) %>" class="product-meta-title"><%= product.name %></a>
+                  <div class="product-meta-properties">
+                    <span class="product-meta-property"><%= item.size %></span>
+                  </div>
+                </div>
+                <div class="line-item-quantity">
+                  <div class="quantity-selector">
+                    <%= link_to 'Decrease quantity', cart_update_item_path, method: :post, params: { product_id: product.id, quantity: [item.quantity - 1, 0].max }, class: 'quantity-selector-button', aria: { label: 'Decrease quantity' } do %>
+                      <svg focusable="false" width="8" height="2" class="icon" viewBox="0 0 8 2">
+                        <path fill="currentColor" d="M0 0h8v2H0z"></path>
+                      </svg>
+                    <% end %>
+                    <input class="quantity-selector-input" type="text" name="updates[]" value="<%= item.quantity %>" size="2" aria-label="Change quantity">
+                    <%= link_to 'Increase quantity', cart_update_item_path, method: :post, params: { product_id: product.id, quantity: item.quantity + 1 }, class: 'quantity-selector-button', aria: { label: 'Increase quantity' } do %>
+                      <svg focusable="false" width="8" height="8" class="icon" viewBox="0 0 8 8">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3 5v3h2V5h3V3H5V0H3v3H0v2h3z" fill="currentColor"></path>
+                      </svg>
+                    <% end %>
+                  </div>
+                  <%= link_to 'Remove', cart_remove_item_path, method: :post, params: { product_id: product.id }, class: 'line-item-remove-button' %>
+                </div>
+              </div>
+              <div class="line-item-price-list">
+                <span class="price"><%= number_to_currency(product.price * item.quantity) %></span>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <p>Product not found</p>
+        <% end %>
+      <% end %>
+
+      <div class="cart-summary">
+        <div class="cart-summary-item">
+          <strong>Total Items:</strong> <%= @cart_items.sum(&:quantity) %>
+        </div>
+        <div class="cart-summary-item">
+          <strong>Total Price:</strong> <%= number_to_currency(@cart_items.sum { |item| (@products[item.product_id]&.price.to_f || 0) * item.quantity }) %>
+        </div>
+      </div>
+
+      <div class="mini-cart-actions">
+        <%= link_to "Continue Shopping", products_path, class: "btn btn-secondary" %>
+        <%= link_to "Checkout", checkout_path, class: "btn btn-success" %>
+      </div>
+    <% else %>
+      <p>Your cart is empty. <%= link_to 'Start shopping', products_path %></p>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const openCartButton = document.getElementById('open-cart');
+    const closeCartButton = document.querySelector('.close-button');
+    const cartSidebar = document.querySelector('.mini-cart');
+
+    if (openCartButton) {
+      openCartButton.addEventListener('click', function () {
+        cartSidebar.classList.add('open');
+      });
+    }
+
+    if (closeCartButton) {
+      closeCartButton.addEventListener('click', function () {
+        cartSidebar.classList.remove('open');
+      });
+    }
+  });
+</script>

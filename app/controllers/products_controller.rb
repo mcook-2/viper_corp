@@ -1,12 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :initialize_session
   before_action :load_cart
 
   def index
     @products = Product.all
-    @clothing_types = ClothingType.all # Add this line to fetch clothing types
+    @clothing_types = ClothingType.all
 
-    @products = filter_by_clothing_type_name(@products)
+    @products = filter_by_clothing_type_id(@products)
     @products = filter_by_sale(@products)
     @products = filter_by_new(@products)
     @products = sort_by_recently_updated(@products)
@@ -14,14 +13,24 @@ class ProductsController < ApplicationController
     @products = paginate(@products)
   end
 
+  def load_cart
+    @cart = Cart.find_or_create_by(id: session[:cart_id]) || Cart.create
+  end
+
+  def add_to_cart
+    product = Product.find(params[:id])
+    @cart.add_item(product.id, params[:quantity].to_i)
+    redirect_to cart_path, notice: "Product added to cart."
+  end
+
   def show
     @product = Product.find(params[:id])
   end
 
-  def filter_by_clothing_type_name(products)
-    return products if params[:clothing_type_name].blank?
+  def filter_by_clothing_type_id(products)
+    return products if params[:clothing_type_id].blank?
 
-    clothing_type = ClothingType.find_by("LOWER(name) = ?", params[:clothing_type_name].downcase)
+    clothing_type = ClothingType.find_by(id: params[:clothing_type_id])
     clothing_type ? products.where(clothing_type_id: clothing_type.id) : products.none
   end
 

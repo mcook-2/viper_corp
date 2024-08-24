@@ -15,3 +15,35 @@
     <button class="btn btn-outline-success" type="submit">Search</button>
   </div>
 <% end %>
+
+<!-- JavaScript to handle dropdown selection -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdownButton = document.getElementById('dropdownMenuButtonSearch');
+    var clothingTypesInput = document.getElementById('clothing_type_id');
+    var searchInput = document.getElementById('search-input');
+
+    // Set the dropdown button text based on the selected category
+    var selectedClothingType = clothingTypesInput.value;
+    var selectedClothingTypeName = document.querySelector(`.search-dropdown-item[data-category="${selectedClothingType}"]`);
+
+    if (selectedClothingTypeName) {
+      dropdownButton.textContent = selectedClothingTypeName.textContent;
+    } else {
+      dropdownButton.textContent = 'Select Category'; // Default text if no selection
+    }
+
+    // Update the hidden input and button text when a dropdown item is clicked
+    document.querySelectorAll('.search-dropdown-item').forEach(function(item) {
+      item.addEventListener('click', function(event) {
+        event.preventDefault();
+        var clothingTypeId = this.getAttribute('data-category');
+        var clothingTypeName = this.textContent;
+
+        clothingTypesInput.value = clothingTypeId;
+        searchInput.placeholder = 'Search in ' + (clothingTypeName || 'All Categories');
+        dropdownButton.textContent = clothingTypeName || 'Select Category';
+      });
+    });
+  });
+</script>

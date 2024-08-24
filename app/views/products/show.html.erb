@@ -47,7 +47,11 @@
           <p><strong>Category:</strong> <%= @product.clothing_type.name %></p>
           <p><strong>Brand:</strong> <%= @product.brand.name %></p>
           <div class="d-flex justify-content-between mt-3">
-            <!-- Optionally, you can add more buttons here -->
+            <%= form_with(url: cart_add_item_path) do |f| %>
+              <%= f.hidden_field :id, value: @product.id %>
+              <%= f.number_field :quantity, value: 0, min: 1 %>
+              <%= f.submit "Add To Cart" %>
+            <% end %>
           </div>
         </div>
       </div>
