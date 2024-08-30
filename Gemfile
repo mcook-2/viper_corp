@@ -22,6 +22,8 @@ gem 'nokogiri'
 
 gem 'httparty'
 
+gem 'stripe'
+
 gem 'rubocop', require: false
 
 gem 'rubocop-rails'
@@ -89,3 +91,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "pay", "~> 7.3"

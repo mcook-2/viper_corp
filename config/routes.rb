@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  get 'profiles/show'
+  get 'profiles/edit'
+  get 'profiles/update'
+  get 'webhooks/stripe'
   devise_for :users
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
    root 'home#index'
@@ -14,12 +19,16 @@ Rails.application.routes.draw do
     post 'add_to_cart', on: :member
   end
 
+  # Stripe routes
+  post 'checkout', to: 'checkouts#show'
+  get 'checkout/success', to: 'checkouts#success'
+  get 'billing', to: 'billing#show'
+
   # Cart routes
   get 'cart', to: 'cart#show'
   post 'cart/add_item'
   post 'cart/update_item'
   post 'cart/remove_item'
-  post 'checkout', to: 'carts#checkout', as: 'checkout'
 
   # Defines the root path route ("/")
   # root "posts#index"

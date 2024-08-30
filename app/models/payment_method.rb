@@ -1,6 +1,6 @@
 class PaymentMethod < ApplicationRecord
   # Associations
-  belongs_to :customer
+  belongs_to :user
 
   # Validations
   validates :card_number, presence: true

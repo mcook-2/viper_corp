@@ -1,0 +1,145 @@
+<div class="container">
+  <h2 class="text-center">Edit <%= resource_name.to_s.humanize %></h2>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        <!-- User Details -->
+        <div class="mb-3">
+          <%= f.label :email, class: 'form-label' %>
+          <%= f.email_field :email, class: 'form-control', autofocus: true, autocomplete: "email" %>
+        </div>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div class="mb-3">
+            <div class="text-warning">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= f.label :password, class: 'form-label' %>
+          <%= f.password_field :password, class: 'form-control', autocomplete: "new-password", id: "password-field" %>
+          <% if @minimum_password_length %>
+            <div class="form-text"><%= @minimum_password_length %> characters minimum</div>
+          <% end %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password_confirmation, class: 'form-label' %>
+          <%= f.password_field :password_confirmation, class: 'form-control', autocomplete: "new-password", id: "password-confirmation-field" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :current_password, class: 'form-label' %>
+          <div class="input-group">
+            <%= f.password_field :current_password, class: 'form-control', autocomplete: "current-password", id: "current-password-field" %>
+            <button type="button" class="btn btn-outline-secondary" id="toggle-password">Show</button>
+          </div>
+        </div>
+
+        <!-- Additional Fields -->
+        <div class="mb-3">
+          <%= f.label :phone_number, class: 'form-label' %>
+          <%= f.text_field :phone_number, class: 'form-control' %>
+        </div>
+
+        <!-- Address Section -->
+        <h3 class="text-center">Shipping Address</h3>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <%= f.label :shipping_street, class: 'form-label' %>
+            <%= f.text_field :shipping_street, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :shipping_city, class: 'form-label' %>
+            <%= f.text_field :shipping_city, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :shipping_state, class: 'form-label' %>
+            <%= f.text_field :shipping_state, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <%= f.label :shipping_postal_code, class: 'form-label' %>
+            <%= f.text_field :shipping_postal_code, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :shipping_country, class: 'form-label' %>
+            <%= f.text_field :shipping_country, class: 'form-control' %>
+          </div>
+        </div>
+
+        <h3 class="text-center">Billing Address</h3>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <%= f.label :billing_street, class: 'form-label' %>
+            <%= f.text_field :billing_street, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :billing_city, class: 'form-label' %>
+            <%= f.text_field :billing_city, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :billing_state, class: 'form-label' %>
+            <%= f.text_field :billing_state, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <%= f.label :billing_postal_code, class: 'form-label' %>
+            <%= f.text_field :billing_postal_code, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :billing_country, class: 'form-label' %>
+            <%= f.text_field :billing_country, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <%= f.submit "Update", class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <h3 class="text-center">Cancel my account</h3>
+
+  <div class="text-center">
+    <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger' %>
+  </div>
+
+  <div class="text-center mt-3">
+    <%= link_to "Back", :back, class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const togglePasswordButton = document.getElementById('toggle-password');
+    const passwordField = document.getElementById('current-password-field');
+
+    togglePasswordButton.addEventListener('click', function() {
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        togglePasswordButton.textContent = 'Hide';
+      } else {
+        passwordField.type = 'password';
+        togglePasswordButton.textContent = 'Show';
+      }
+    });
+  });
+</script>

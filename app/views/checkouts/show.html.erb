@@ -1,0 +1,84 @@
+<h1> Checkout! </h1>
+
+<%= render partial: 'pay/stripe/checkout_button', locals: {
+    session: @checkout_session,
+    title: "Checkout"
+} %>
+
+<h1>Checkout</h1>
+
+<div class="container mt-4">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Shipping Information</h5>
+      <%= form_with url: checkout_path, method: :post, local: true do %>
+        <div class="mb-3">
+          <label for="shipping_name" class="form-label">Full Name</label>
+          <%= text_field_tag :shipping_name, nil, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <label for="shipping_address" class="form-label">Address</label>
+          <%= text_field_tag :shipping_address, nil, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <label for="shipping_city" class="form-label">City</label>
+          <%= text_field_tag :shipping_city, nil, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <label for="shipping_postal_code" class="form-label">Postal Code</label>
+          <%= text_field_tag :shipping_postal_code, nil, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <label for="shipping_country" class="form-label">Country</label>
+          <%= text_field_tag :shipping_country, nil, class: "form-control", required: true %>
+        </div>
+
+        <h5 class="card-title mt-4">Order Summary</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col" class="text-center">Quantity</th>
+              <th scope="col" class="text-end">Total</th>
+            </tr>
+          </thead>
+<tbody>
+  <% if @cart_items.present? && @cart_items.any? %>
+    <% @cart_items.each do |item| %>
+      <% product = item.product %>
+      <% current_price = product.product_prices.order(start_date: :desc).first || OpenStruct.new(price: product.price) %>
+      <tr>
+        <td><strong><%= product.name %></strong></td>
+        <td class="text-center"><%= item.quantity %></td>
+        <td class="text-end"><%= number_to_currency(current_price.price * item.quantity) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="2" class="text-end fw-bold">Total</td>
+      <td class="text-end fw-bold">
+        <%= number_to_currency(@cart_items.sum { |item| item.product.product_prices.order(start_date: :desc).first.price * item.quantity }) %>
+      </td>
+    </tr>
+  <% else %>
+    <tr>
+      <td colspan="3" class="text-center">Your cart is empty.</td>
+    </tr>
+  <% end %>
+</tbody>
+
+        </table>
+
+        <!-- Hidden fields for Stripe checkout -->
+        <% @cart_items.each do |item| %>
+          <input type="hidden" name="line_items[][product_id]" value="<%= item.product.id %>">
+          <input type="hidden" name="line_items[][price]" value="<%= item.product.stripe_price_id %>">
+          <input type="hidden" name="line_items[][quantity]" value="<%= item.quantity %>">
+        <% end %>
+
+        <div class="mt-4">
+          <%= submit_tag "Proceed to Payment", class: "btn btn-primary w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

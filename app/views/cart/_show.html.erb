@@ -59,7 +59,11 @@
     <div class="col-12 col-md-4">
       <div class="position-sticky" style="top: 1rem;">
         <%= form_with url: checkout_path, method: :post, local: true do %>
-          <input type="hidden" name="checkout">
+          <% @cart_items.each do |item| %>
+            <input type="hidden" name="line_items[][product_id]" value="<%= item.product.id %>">
+            <input type="hidden" name="line_items[][price]" value="<%= item.product.stripe_price_id %>">
+            <input type="hidden" name="line_items[][quantity]" value="<%= item.quantity %>">
+          <% end %>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Cart Total</h5>

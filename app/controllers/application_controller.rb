@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   before_action :set_clothing_types
 
   before_action :set_render_cart
@@ -42,6 +44,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[
+                                        first_name last_name phone_number
+                                        shipping_street shipping_city shipping_state
+                                        shipping_postal_code shipping_country
+                                        billing_street billing_city billing_state
+                                        billing_postal_code billing_country
+                                      ])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[
+                                        first_name last_name phone_number
+                                        shipping_street shipping_city shipping_state
+                                        shipping_postal_code shipping_country
+                                        billing_street billing_city billing_state
+                                        billing_postal_code billing_country
+                                      ])
+  end
 
   private
 

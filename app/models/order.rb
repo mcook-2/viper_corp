@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   # Associations
-  belongs_to :customer
+  belongs_to :user
   has_many :order_items, dependent: :nullify
   has_many :products, through: :order_items
 

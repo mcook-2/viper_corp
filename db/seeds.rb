@@ -94,6 +94,23 @@ if Rails.env.development?
   AdminUser.create!(email: "admin@example.com", password: "password",
                     password_confirmation: "password")
 
-  User.create(email: "john@doe.com", password: "password",
-              password_confirmation: "password")
+  User.create(
+    email:                 "john@doe.com",
+    password:              "password",
+    password_confirmation: "password",
+    first_name:            "John",
+    last_name:             "Doe",
+    phone_number:          "123-456-7890",
+    shipping_street:       "123 Main St",
+    shipping_city:         "Winnipeg",
+    shipping_state:        "MB",
+    shipping_postal_code:  "R3C 1A2",
+    shipping_country:      "Canada",
+    billing_street:        "456 Elm St",
+    billing_city:          "Winnipeg",
+    billing_state:         "MB",
+    billing_postal_code:   "R3C 2B4",
+    billing_country:       "Canada"
+  )
+
 end
