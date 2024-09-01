@@ -7,7 +7,6 @@
     </button>
     <% if @cart.cart_items.present? && @cart.cart_items.count > 0 %>
       <%= render "cart/cart_items" %>
-      <p class="cart-total">Total: <%= @cart.total %></p>
     <% else %>
       <p>Your cart is empty</p>
     <% end %>

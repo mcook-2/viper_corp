@@ -1,8 +1,8 @@
 require "uri"
 
-namespace :stripe do
+namespace :stripe do # rubocop:disable Metrics/BlockLength
   desc "Create a Stripe product and price for a single product"
-  task create_product_and_price: :environment do
+  task create_product_and_price: :environment do # rubocop:disable Metrics/BlockLength
     test_product_id = "1"
     product = Product.find_by(id: test_product_id)
 

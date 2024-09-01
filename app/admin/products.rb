@@ -1,10 +1,9 @@
 ActiveAdmin.register Product do
 
-  permit_params :name, :description, :features, :stock_quantity, :clothing_type_id,
+  permit_params :name, :description, :features, :clothing_type_id,
   :brand_id, category_ids: [],
   images_attributes: [:id, :url, :_destroy],
-  product_prices_attributes: [:id, :price, :start_date, :end_date, :_destroy],
-  product_colors_attributes: [:id, :color_id, :_destroy]
+  product_prices_attributes: [:id, :price, :start_date, :end_date, :_destroy]
 
 
   show do
@@ -18,7 +17,6 @@ ActiveAdmin.register Product do
       row :name
       row :description
       row :features
-      row :stock_quantity
       row :clothing_type
       row :categories do
         if product.categories.any?
@@ -47,28 +45,6 @@ ActiveAdmin.register Product do
       end
     end
 
-    # show for reviews
-    panel 'Reviews' do
-      if product.reviews.any?
-        table_for product.reviews.order(created_at: :desc) do
-          column 'Customer' do |review|
-            review.customer.email
-          end
-          column 'Rating' do |review|
-            review.rating
-          end
-          column 'Comment' do |review|
-            review.comment
-          end
-          column 'Timestamp' do |review|
-            review.timestamp.strftime('%B %d, %Y %H:%M')
-          end
-        end
-      else
-        para 'No reviews yet.'
-      end
-    end
-
     # show for product prices
     panel 'Prices' do
       if product.product_prices.any?
@@ -88,30 +64,15 @@ ActiveAdmin.register Product do
       end
     end
 
-    # show for product colors
-    panel 'Colors' do
-      if product.product_colors.any?
-        table_for product.product_colors do
-          column 'Product Colors' do |product_color|
-            color = product_color.color
-            content_tag(:div, style: "display: flex; align-items: center;") do
-              concat content_tag(:div, '', style: "background-color: #{color.hex_code}; width: 20px; height: 20px; border: 1px solid #000; margin-right: 10px; display: inline-block;")
-              concat content_tag(:span, "#{color.name}", style: "font-weight: bold; margin-right: 10px;")  # Added margin-right for spacing
-              concat content_tag(:span, "( #{color.hex_code})", style: "font-weight: normal;")
-            end
-          end
-        end
-      else
-        para 'No colors available.'
-      end
-    end
-
     # ActiveAdmin comments section
     active_admin_comments
   end
 
   form do |f|
     f.semantic_errors(*f.object.errors.attribute_names)
+    f.object.errors.full_messages.each do |message|
+      li message
+    end
 
     f.inputs 'Product Details' do
       f.input :name
@@ -162,12 +123,6 @@ ActiveAdmin.register Product do
         price.input :price
         price.input :start_date, as: :datepicker
         price.input :end_date, as: :datepicker
-      end
-    end
-
-    f.inputs 'Colors' do
-      f.has_many :product_colors, allow_destroy: true, new_record: true do |product_color|
-        product_color.input :color, collection: Color.all.map { |c| [c.name, c.id] }, prompt: 'Select a color'
       end
     end
 

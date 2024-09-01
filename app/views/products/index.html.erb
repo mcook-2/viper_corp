@@ -1,16 +1,32 @@
 <div class="container-fluid">
-  <h1>Available Products</h1>
+  <h1>
+    <% if @clothing_type %>
+      All <span class="text-shimmer">"<%= @clothing_type.name.capitalize %>"</span> Products
+    <% else %>
+      All Products
+    <% end %>
 
+    <% if params[:search].present? %>
+      <small>for "<%= params[:search] %>"</small>
+    <% end %>
+  </h1>
   <div class="filters mb-3">
     <%= link_to 'All', products_path, class: 'btn btn-primary' %>
-    <%= link_to 'On Sale', products_path(on_sale: true), class: 'btn btn-primary' %>
     <%= link_to 'New Products', products_path(new: true), class: 'btn btn-primary' %>
     <%= link_to 'Recently Updated', products_path(recently_updated: true), class: 'btn btn-primary' %>
   </div>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <% @products.each do |product| %>
-      <%= render partial: 'product', locals: { product: product, image: product.images.first } %>
+  <div class="product-list">
+    <% if @products.any? %>
+      <% @products.each do |product| %>
+        <%= render partial: 'product', locals: { product: product, image: product.images.first } %>
+      <% end %>
+    <% else %>
+      <% if params[:new] || params[:recently_updated] %>
+        <p class="text-muted text-center">Nothing since the past 3 days.</p>
+      <% else %>
+        <p class="text-muted text-center">No products match your search.</p>
+      <% end %>
     <% end %>
   </div>
 

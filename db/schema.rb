@@ -89,14 +89,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_013738) do
     t.index ["clothing_type_id"], name: "index_clothing_types_categories_on_clothing_type_id"
   end
 
-  create_table "colors", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "hex_code", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_colors_on_name", unique: true
-  end
-
   create_table "images", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.string "url"
@@ -227,16 +219,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_013738) do
     t.index ["user_id"], name: "index_payment_methods_on_user_id"
   end
 
-  create_table "product_colors", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "color_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["color_id"], name: "index_product_colors_on_color_id"
-    t.index ["product_id", "color_id"], name: "index_product_colors_on_product_id_and_color_id", unique: true
-    t.index ["product_id"], name: "index_product_colors_on_product_id"
-  end
-
   create_table "product_prices", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.datetime "start_date"
@@ -269,7 +251,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_013738) do
     t.string "name"
     t.text "description"
     t.text "features"
-    t.integer "stock_quantity"
     t.bigint "clothing_type_id", null: false
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
@@ -277,18 +258,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_013738) do
     t.string "stripe_price_id"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["clothing_type_id"], name: "index_products_on_clothing_type_id"
-  end
-
-  create_table "reviews", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "rating"
-    t.text "comment"
-    t.datetime "timestamp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_reviews_on_product_id"
-    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "tax_rates", force: :cascade do |t|
@@ -344,13 +313,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_27_013738) do
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
   add_foreign_key "payment_methods", "users"
-  add_foreign_key "product_colors", "colors"
-  add_foreign_key "product_colors", "products"
   add_foreign_key "product_prices", "products"
   add_foreign_key "product_sales", "product_prices", column: "product_prices_id"
   add_foreign_key "product_sales", "tax_rates"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "clothing_types"
-  add_foreign_key "reviews", "products"
-  add_foreign_key "reviews", "users"
 end

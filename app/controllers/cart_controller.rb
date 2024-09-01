@@ -8,7 +8,7 @@ class CartController < ApplicationController
     @products = Product.where(id: product_ids).index_by(&:id)
   end
 
-  def add_item
+  def add_item # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @product = Product.find_by(id: params[:id])
     quantity = params[:quantity].to_i
     current_cart_item = @cart.cart_items.find_by(product_id: @product.id)

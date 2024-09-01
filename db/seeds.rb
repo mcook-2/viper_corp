@@ -31,10 +31,9 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
 
   # Create product
   product = Product.create!(
-    name:           row["name"],
-    description:    row["description"],
-    features:       row["features"],
-    stock_quantity: rand(10..350),
+    name:          row["name"],
+    description:   row["description"],
+    features:      row["features"],
     clothing_type:,
     brand:
   )
@@ -58,19 +57,32 @@ CSV.foreach(Rails.root.join("db/y2k_all_products.csv"), headers: true) do |row|
 end
 
 tax_rates = [
-  { province: "Alberta", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "British Columbia", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.07, effective_date: Time.zone.today },
-  { province: "Manitoba", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.07, effective_date: Time.zone.today },
-  { province: "New Brunswick", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Newfoundland and Labrador", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Northwest Territories", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Nova Scotia", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Nunavut", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Ontario", gst_rate: 0.13, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Quebec", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.09975, effective_date: Time.zone.today },
-  { province: "Prince Edward Island", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today },
-  { province: "Saskatchewan", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.06, effective_date: Time.zone.today },
-  { province: "Yukon", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00, effective_date: Time.zone.today }
+  { province: "Alberta", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "British Columbia", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.07,
+effective_date: Time.zone.today },
+  { province: "Manitoba", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.07,
+effective_date: Time.zone.today },
+  { province: "New Brunswick", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Newfoundland and Labrador", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Northwest Territories", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Nova Scotia", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Nunavut", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Ontario", gst_rate: 0.13, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Quebec", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.09975,
+effective_date: Time.zone.today },
+  { province: "Prince Edward Island", gst_rate: 0.15, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today },
+  { province: "Saskatchewan", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.06,
+effective_date: Time.zone.today },
+  { province: "Yukon", gst_rate: 0.05, hst_rate: 0.00, pst_rate: 0.00,
+effective_date: Time.zone.today }
 ]
 
 tax_rates.each do |rate|

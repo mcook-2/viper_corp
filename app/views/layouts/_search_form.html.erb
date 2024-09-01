@@ -1,18 +1,16 @@
-<!-- Search form in the nav -->
 <%= form_with url: products_path, method: :get, local: true, class: 'd-flex align-items-center' do %>
   <div class="input-group mb-6 ">
     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButtonSearch" data-bs-toggle="dropdown" aria-expanded="false">
-      <%= @clothing_types.find { |c| c.id.to_s == params[:clothing_type_id] }&.name || 'Select Category' %>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonSearch">
-      <li><a class="dropdown-item search-dropdown-item" href="#" data-category="">All</a></li>
+      <li><a class="dropdown-item search-dropdown-item" href="#" data-category=""></a></li>
       <% @clothing_types.each do |type| %>
         <li><a class="dropdown-item search-dropdown-item" href="#" data-category="<%= type.id %>"><%= type.name %></a></li>
       <% end %>
     </ul>
     <input type="hidden" name="clothing_type_id" id="clothing_type_id" value="<%= params[:clothing_type_id] %>">
-    <input type="search" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search products" aria-label="Search" id="search-input">
-    <button class="btn btn-outline-success" type="submit">Search</button>
+    <input type="search" name="search" value="<%= params[:search] %>" class="form-control" placeholder="Search..." aria-label="Search" id="search-input">
+    <button class="btn btn-outline-success" type="submit">Go</button>
   </div>
 <% end %>
 
@@ -23,15 +21,21 @@
     var clothingTypesInput = document.getElementById('clothing_type_id');
     var searchInput = document.getElementById('search-input');
 
-    // Set the dropdown button text based on the selected category
-    var selectedClothingType = clothingTypesInput.value;
-    var selectedClothingTypeName = document.querySelector(`.search-dropdown-item[data-category="${selectedClothingType}"]`);
+    function updateButtonText() {
+      var selectedClothingType = clothingTypesInput.value;
+      var selectedClothingTypeName = document.querySelector(`.search-dropdown-item[data-category="${selectedClothingType}"]`);
 
-    if (selectedClothingTypeName) {
-      dropdownButton.textContent = selectedClothingTypeName.textContent;
-    } else {
-      dropdownButton.textContent = 'Select Category'; // Default text if no selection
+      // Check if screen width is greater than 576px
+      if (window.matchMedia('(min-width: 577px)').matches) {
+        dropdownButton.textContent = selectedClothingTypeName ? selectedClothingTypeName.textContent : 'Select Category';
+      } else {
+        // Clear button text if screen width is 576px or less
+        dropdownButton.textContent = '';
+      }
     }
+
+    // Initialize button text
+    updateButtonText();
 
     // Update the hidden input and button text when a dropdown item is clicked
     document.querySelectorAll('.search-dropdown-item').forEach(function(item) {
@@ -42,8 +46,13 @@
 
         clothingTypesInput.value = clothingTypeId;
         searchInput.placeholder = 'Search in ' + (clothingTypeName || 'All Categories');
-        dropdownButton.textContent = clothingTypeName || 'Select Category';
+
+        // Update button text based on screen width
+        updateButtonText();
       });
     });
+
+    // Update button text on window resize
+    window.addEventListener('resize', updateButtonText);
   });
 </script>

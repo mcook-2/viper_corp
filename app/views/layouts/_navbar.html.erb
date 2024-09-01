@@ -1,0 +1,54 @@
+<header>
+  <nav class="header">
+    <div class="hamburger-icon" id="hamburgerIcon">
+      <%= image_tag 'hamburger-icon.png', alt: 'Menu', style: 'color: white; width: 30px; height: 30px;' %>
+    </div>
+    <a class="logo navbar-brand" href="<%= root_path %>">
+      <%= image_tag 'viper_corp_logo_nbg.png', alt: 'Viper Corp Logo', style: 'width: 50px; height: 50px;' %>
+    </a>
+    <div class="search-form">
+      <%= render 'layouts/search_form' %>
+    </div>
+    <% unless current_page?(cart_path) %>
+      <%= image_tag 'cart.svg', alt: 'Cart', class: 'cart-icon', id: "cart-icon", style: 'color: white; width: 30px; height: 30px;' %>
+    <% end %>
+  </nav>
+  <div class="nav-bg" id="sidebarMenu">
+    <div class="sidebar-content">
+      <button type="button" class="sidebar-button" id="sidebarCloseButton" title="Close">
+        <svg focusable="false" width="14" height="14" class="icon" viewBox="0 0 14 14">
+          <path d="M13 13L1 1M13 1L1 13" stroke="currentColor" stroke-width="2" fill="none"></path>
+        </svg>
+      </button>
+      <%= link_to 'Home', root_path, class: 'nav-link' %>
+      <%= link_to 'Products', products_path, class: 'nav-link' %>
+      <!-- Categories Dropdown -->
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Categories
+        </a>
+        <div class="dropdown-menu">
+          <% @clothing_types.each do |type| %>
+            <%= link_to type.name, products_path(clothing_type_id: type.id), class: 'dropdown-item' %>
+          <% end %>
+        </div>
+      </div>
+      <%= render 'user/session_manager' %>
+    </div>
+  </div>
+</header>
+<script>
+const menuIcon = document.getElementById('hamburgerIcon');
+const sidebarMenu = document.getElementById('sidebarMenu');
+const closeButton = document.getElementById('sidebarCloseButton');
+
+// Toggle sidebar menu on hamburger icon click
+menuIcon.addEventListener('click', () => {
+    sidebarMenu.classList.toggle('active');
+});
+
+// Close sidebar menu on close button click
+closeButton.addEventListener('click', () => {
+    sidebarMenu.classList.remove('active');
+});
+</script>

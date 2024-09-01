@@ -62,7 +62,7 @@
         <div class="cart-summary-item">
           <strong>Total Items:</strong> <%= @cart.cart_items.sum(&:quantity) %>
         </div>
-        <div class="cart-summary-item">
+        <div class="cart-total">
           <strong>Total Price:</strong> <%= number_to_currency(@cart.cart_items.sum { |item| item.product.product_prices.order(start_date: :desc).first&.price.to_f * item.quantity }) %>
         </div>
       </div>

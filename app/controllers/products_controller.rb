@@ -6,11 +6,14 @@ class ProductsController < ApplicationController
     @clothing_types = ClothingType.all
 
     @products = filter_by_clothing_type_id(@products)
-    @products = filter_by_sale(@products)
     @products = filter_by_new(@products)
     @products = sort_by_recently_updated(@products)
     @products = search_by_keyword(@products)
     @products = paginate(@products)
+
+    return unless params[:clothing_type_id]
+
+    @clothing_type = ClothingType.find_by(id: params[:clothing_type_id])
   end
 
   def load_cart
@@ -34,22 +37,16 @@ class ProductsController < ApplicationController
     clothing_type ? products.where(clothing_type_id: clothing_type.id) : products.none
   end
 
-  def filter_by_sale(products)
-    return products unless params[:on_sale]
-
-    products.where(on_sale: true)
-  end
-
   def filter_by_new(products)
     return products unless params[:new]
 
-    products.where("created_at >= ?", 1.month.ago)
+    products.where("created_at >= ?", 3.days.ago)
   end
 
   def sort_by_recently_updated(products)
     return products unless params[:recently_updated]
 
-    products.order(updated_at: :desc)
+    products.where("updated_at >= ?", 3.days.ago).order(updated_at: :desc)
   end
 
   def search_by_keyword(products)

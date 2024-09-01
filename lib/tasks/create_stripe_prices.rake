@@ -1,8 +1,8 @@
 require "uri"
 
-namespace :stripe do
+namespace :stripe do # rubocop:disable Metrics/BlockLength
   desc "Create Stripe products and prices for all products in the database"
-  task create_products_and_prices: :environment do
+  task create_products_and_prices: :environment do # rubocop:disable Metrics/BlockLength
     products = Product.includes(:product_prices).all
 
     if products.empty?
@@ -10,7 +10,7 @@ namespace :stripe do
       return
     end
 
-    products.each do |product|
+    products.each do |product| # rubocop:disable Metrics/BlockLength
       if product.product_prices.empty?
         puts "No product price found for product with ID #{product.id}. Skipping."
         next

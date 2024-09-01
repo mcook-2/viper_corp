@@ -1,5 +1,5 @@
 class TaxRate < ApplicationRecord
-  has_many :product_sales
+  has_many :product_sales, dependent: :nullify
 
   validates :province, :gst_rate, :pst_rate, :hst_rate, presence: true
   validates :gst_rate, :pst_rate, :hst_rate, numericality: { greater_than_or_equal_to: 0 }

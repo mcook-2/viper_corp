@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>ViperCorp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
@@ -14,64 +15,17 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-
-    <!-- Display session data for debugging -->
-  <div style=" top: 0; right: 0; background: rgba(0, 0, 0, 0.8); color: white; padding: 10px; z-index: 10000;">
-    <strong>Session Data:</strong>
-    <%= debug(session) %>
-  </div>
-
-  <% flash.each do |type, message| %>
-  <div class="flash <%= type %>">
-    <%= message %>
-  </div>
-<% end %>
-
-      <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="<%= root_path %>">Viper Corp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <%= link_to 'Home', root_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Products', products_path, class: 'nav-link' %>
-            </li>
-            <!-- Categories Dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Categories
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <% @clothing_types.each do |type| %>
-                  <%= link_to type.name, products_path(clothing_type_id: type.id), class: 'dropdown-item' %>
-                <% end %>
-              </div>
-            </li>
-          </ul>
-          <%= render 'layouts/search_form' %>
-          <ul class="navbar-nav">
-            <%= render 'user/session_manager' %>
-            <li class="nav-item">
-              <%= image_tag 'cart.svg', alt: 'Cart', class: 'cart-icon', id: "cart-icon", style: 'width: 40px; height: 40px;' %>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+  <!-- Navbar -->
+  <%= render partial: 'layouts/navbar' %>
 
   <!-- Cart Div -->
   <div id="cart-div" class="cart-div">
-    <!-- Cart content goes here -->
     <%= render partial: 'cart/cart' if @render_cart %>
   </div>
 
+  <div class="main-content">
     <%= yield %>
+  </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -94,10 +48,6 @@
     }
   });
 </script>
-
-
-
-
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {

@@ -21,13 +21,30 @@ class ProductSale < ApplicationRecord
   def calculate_tax_totals
     return if sale_price.blank?
 
-    # this logic might not work??
     total_price = effective_price
-    self.gst_total = total_price * tax_rate.gst_rate
-    self.hst_total = total_price * tax_rate.hst_rate
-    self.pst_total = total_price * tax_rate.pst_rate
-    self.tax_total = gst_total + hst_total + pst_total
+    self.gst_total = calculate_gst(total_price)
+    self.hst_total = calculate_hst(total_price)
+    self.pst_total = calculate_pst(total_price)
+    self.tax_total = calculate_tax_total
     self.tax_included_total = total_price + tax_total
+  end
+
+  private
+
+  def calculate_gst(total_price)
+    total_price * tax_rate.gst_rate
+  end
+
+  def calculate_hst(total_price)
+    total_price * tax_rate.hst_rate
+  end
+
+  def calculate_pst(total_price)
+    total_price * tax_rate.pst_rate
+  end
+
+  def calculate_tax_total
+    gst_total + hst_total + pst_total
   end
 
   # Callback to calculate tax totals before saving the record
